@@ -344,6 +344,10 @@ function Component:__mount(reconciler, virtualNode)
 	end
 
 	internalData.lifecyclePhase = ComponentLifecyclePhase.Idle
+
+	if virtualNode.eventManager ~= nil then
+		virtualNode.eventManager:resume()
+	end
 end
 
 --[[
@@ -486,6 +490,10 @@ function Component:__resolveUpdate(incomingProps, incomingState)
 		self:willUpdate(incomingProps, incomingState)
 	end
 
+	if virtualNode.eventManager ~= nil then
+		virtualNode.eventManager:suspend()
+	end
+
 	internalData.lifecyclePhase = ComponentLifecyclePhase.Render
 
 	self.props = incomingProps
@@ -502,6 +510,11 @@ function Component:__resolveUpdate(incomingProps, incomingState)
 	end
 
 	internalData.lifecyclePhase = ComponentLifecyclePhase.Idle
+
+	if virtualNode.eventManager ~= nil then
+		virtualNode.eventManager:resume()
+	end
+
 	return true
 end
 
